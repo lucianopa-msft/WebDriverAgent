@@ -3287,7 +3287,12 @@ enum GCDAsyncUdpSocketConfig
 				NSError *error = nil;
 				
 				int addressFamily = [self getAddress:&address error:&error fromAddresses:connectPacket->addresses];
-				
+				if (error != nil) {
+					[self notifyDidNotConnect:error];
+					return;
+				}
+				assert(address != nil && "There was not an error, expected non-nil address");
+
 				// Perform connect
 				
 				BOOL result = NO;
